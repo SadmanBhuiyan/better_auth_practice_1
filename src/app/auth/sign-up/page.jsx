@@ -1,6 +1,6 @@
-
 'use client';
 
+import { signUp } from "@/lib/auth-client";
 import {
     Button,
     Description,
@@ -12,17 +12,23 @@ import {
 } from "@heroui/react";
 
 const SignUpPage = () => {
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
-        const data = {};
+        const data = Object.fromEntries(formData.entries());
 
         formData.forEach((value, key) => {
             data[key] = value.toString();
         });
 
-        console.log(data);
+        const {data: resData, error} = await signUp.email({
+            name: data.name,
+            email: data.email,
+            password: data.password
+        }) 
+        console.log(resData, error);
+        
     };
 
     return (
@@ -33,6 +39,20 @@ const SignUpPage = () => {
                 className="flex w-96 flex-col gap-4"
                 onSubmit={onSubmit}
             >
+                <TextField
+                    isRequired
+                    name="name"
+                    validate={(value) => {
+                        if (value.length < 3) {
+                            return "Name must be at least 3 characters";
+                        }
+                        return null;
+                    }}
+                >
+                    <Label>Name</Label>
+                    <Input placeholder="John Doe" />
+                    <FieldError />
+                </TextField>
                 <TextField
                     isRequired
                     name="email"
