@@ -1,6 +1,6 @@
 'use client';
 
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import {
     Button,
     Description,
@@ -22,14 +22,26 @@ const SignUpPage = () => {
             data[key] = value.toString();
         });
 
-        const {data: resData, error} = await signUp.email({
+        const { data: resData, error } = await signUp.email({
             name: data.name,
             email: data.email,
             password: data.password
-        }) 
+        })
         console.log(resData, error);
-        
+
     };
+
+    const handleGoogleSignIn = async () => {
+        const resData = await signIn.social({
+            provider: 'google'
+        })
+    }
+    const handleGithubSignIn = async () => {
+        const resData = await signIn.social({
+            provider: 'github'
+        })
+        console.log(resData);
+    }
 
     return (
         <div>
@@ -107,6 +119,11 @@ const SignUpPage = () => {
                     </Button>
                 </div>
             </Form>
+
+            <p>OR</p>
+
+            <Button className='danger' onClick={() => handleGoogleSignIn()}>Sign up with Google</Button>
+            <Button onClick={() => handleGithubSignIn()}>Sign up with Github</Button>
         </div>
     );
 };
