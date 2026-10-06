@@ -28,6 +28,9 @@ export default function Navbar() {
         {session?.user && <li>
             <Link href="/profile">Profile</Link>
         </li>}
+        {session?.user && <li>
+            <Link href="/settings">Settings</Link>
+        </li>}
     </>
 
     const authLinks = <>
